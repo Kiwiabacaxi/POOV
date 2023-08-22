@@ -25,9 +25,10 @@ public class ArrayListExercicioV2 {
 
         // d) Mostrar o vetor inteiro na tela
         System.out.println("Vetor completo: ");
-        for (int elemento : vetor) {
+        System.out.println(vetor);
+        /* for (int elemento : vetor) {
             System.out.print("[ " + elemento + " ]" + " ");
-        }
+        } */
 
         // e) Mostrar o vetor de trás para frente na tela
         System.out.println("\nVetor de trás para frente: ");
@@ -73,9 +74,9 @@ public class ArrayListExercicioV2 {
 
         // k) Mostrar os valores ímpares do vetor
         System.out.println("\nValores ímpares: ");
-        for (int elemento : vetor) {
-            if (elemento % 2 != 0) {
-                System.out.print("[ " + elemento + " ]" + " ");
+        for (int i : vetor) {
+            if (i % 2 != 0) {
+                System.out.print("[ " + i + " ]" + " ");
             }
         }
 
