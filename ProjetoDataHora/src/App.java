@@ -26,12 +26,12 @@ public class App {
         LocalDate agora = LocalDate.now();
         System.out.println(agora);
 
-        /*
-         * System.out.print("Digite a data  (dd/mm/aaaa): ");
-         * String dataTexto = teclado.nextLine();
-         * LocalDate data = LocalDate.parse(dataTexto, formatador);
-         * System.out.println(data.format(formatador));
-         */
+        
+        System.out.print("Digite a data  (dd/mm/aaaa): ");
+        String dataTexto = teclado.nextLine();
+        LocalDate data = LocalDate.parse(dataTexto, formatador);
+        System.out.println(data.format(formatador));
+        
 
         // Periodo
         Period periodo = Period.of(2, 3, 10);
