@@ -33,6 +33,10 @@ public class App {
         Lampada lampada5 = new Lampada(220, 60, true, false, true);
         lampada5.mostrar();
 
+        // lampada com cor
+        LampadaColorida lampadaColorida = new LampadaColorida("vermelho");
+        lampadaColorida.mostrar();
+
     }
 
 }

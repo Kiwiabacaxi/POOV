@@ -55,6 +55,7 @@ public class Lampada {
     // construtor v5 usando this
     public Lampada(int tensao, int potencia, boolean ligada, boolean quebrada, boolean queimada) {
         this(tensao, potencia, ligada);
+        System.out.println("Construtor v5");
         this.quebrada = quebrada;
         this.queimada = queimada;
         
