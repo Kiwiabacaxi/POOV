@@ -37,6 +37,11 @@ public class LampadaColorida extends Lampada{
         this.cor = cor;
     }
 
+    // override
+    // isso é um override - nao e muito recomendado
+    public void setTensao(int tensao) {
+        super.getTensao(); // chama o getter da classe pai
+    }
 
     // metodos
     public void mudarCor(String cor) {

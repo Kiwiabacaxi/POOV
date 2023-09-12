@@ -148,6 +148,51 @@ public class Lampada {
         setLigada(true);
     }
 
+
+    // toString - auto
+    @Override
+    public String toString() {
+        return String.format("Lampada [tensao=%s, potencia=%s, ligada=%s, quebrada=%s, queimada=%s]", tensao, potencia,
+                ligada, quebrada, queimada);
+    }
+    
+
+    // hashCode - auto
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + tensao;
+        result = prime * result + potencia;
+        result = prime * result + (ligada ? 1231 : 1237);
+        result = prime * result + (quebrada ? 1231 : 1237);
+        result = prime * result + (queimada ? 1231 : 1237);
+        return result;
+    }
+
+    // equals
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Lampada other = (Lampada) obj;
+        if (tensao != other.tensao)
+            return false;
+        if (potencia != other.potencia)
+            return false;
+        if (ligada != other.ligada)
+            return false;
+        if (quebrada != other.quebrada)
+            return false;
+        if (queimada != other.queimada)
+            return false;
+        return true;
+    }
+
     // apagar
     public void apagar() {
         setLigada(false);

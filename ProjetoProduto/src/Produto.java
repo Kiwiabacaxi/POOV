@@ -184,6 +184,8 @@ public class Produto {
 
     }
 
+    // quando ele e estatico ele nao precisa ser instanciado
+        // public static Produto obterProduto() {
     public Produto obterProduto() {
         // iniciar o teclado
         Scanner teclado = new Scanner(System.in);
