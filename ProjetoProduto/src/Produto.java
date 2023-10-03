@@ -276,6 +276,6 @@ public class Produto {
 
         System.out.println("Esta vencido " + ((isVencido()) ? "Sim" : "Não"));
 
-    }t
+    }
 
 }
