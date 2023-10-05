@@ -38,7 +38,7 @@ public class ClasseProva {
         if (numeroInteiroPositivo > 0) {
             this.numeroInteiroPositivo = numeroInteiroPositivo;
         } else {
-            this.numeroInteiroPositivo = 0;
+            throw new IllegalArgumentException("Numero inteiro positivo invalido");
         }
     }
 
@@ -50,6 +50,9 @@ public class ClasseProva {
     public void setNome(String nome) {
         if (nome.length() > 0) {
             this.nome = nome;
+        }
+        else {
+            throw new IllegalArgumentException("Nome invalido");
         }
     }
 
