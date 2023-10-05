@@ -85,6 +85,7 @@ public class ClasseProva {
 
     // metodos
     // toString
+    @Override
     public String toString() {
         return "numeroInteiroPositivo: " + this.numeroInteiroPositivo + "\n" +
                 "nome: " + this.nome + "\n" +
