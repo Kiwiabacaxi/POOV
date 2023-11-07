@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 import poov.modelo.Vacina;
 import poov.modelo.dao.DAOFactory;
-import poov.modelo.dao.VacinaDAO;
+import poov.modelo.dao.VacinaDAOAntigo;
 
 public class LeituraBanco {
 
@@ -14,7 +14,7 @@ public class LeituraBanco {
         DAOFactory factory = new DAOFactory();
         try {
             factory.abrirConexao();
-            VacinaDAO dao = factory.criarVacinaDAO();
+            VacinaDAOAntigo dao = factory.criarVacinaDAO();
 
             Scanner s = new Scanner(System.in);
             long codigo;

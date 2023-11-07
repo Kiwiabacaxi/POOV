@@ -6,7 +6,7 @@ import java.util.Scanner;
 import poov.modelo.Situacao;
 import poov.modelo.Vacina;
 import poov.modelo.dao.DAOFactory;
-import poov.modelo.dao.VacinaDAO;
+import poov.modelo.dao.VacinaDAOAntigo;
 
 public class UpdateBanco {
 
@@ -19,7 +19,7 @@ public class UpdateBanco {
             System.out.print("Digite o codigo da vacina a alterar: ");
             long codigo = Long.parseLong(s.nextLine());
             factory.abrirConexao();
-            VacinaDAO dao = factory.criarVacinaDAO();
+            VacinaDAOAntigo dao = factory.criarVacinaDAO();
 
             Vacina vacina = dao.buscar(codigo);
 

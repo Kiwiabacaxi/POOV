@@ -5,7 +5,7 @@ import java.util.List;
 
 import poov.modelo.Vacina;
 import poov.modelo.dao.DAOFactory;
-import poov.modelo.dao.VacinaDAO;
+import poov.modelo.dao.VacinaDAOAntigo;
 
 public class LeituraTodosBanco {
 
@@ -14,7 +14,7 @@ public class LeituraTodosBanco {
         DAOFactory factory = new DAOFactory();
         try {
             factory.abrirConexao();
-            VacinaDAO dao = factory.criarVacinaDAO();
+            VacinaDAOAntigo dao = factory.criarVacinaDAO();
             List<Vacina> vacinas = dao.buscarTodas();
 
             if (vacinas.isEmpty()) {

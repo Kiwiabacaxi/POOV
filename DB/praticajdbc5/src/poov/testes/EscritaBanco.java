@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 import poov.modelo.Vacina;
 import poov.modelo.dao.DAOFactory;
-import poov.modelo.dao.VacinaDAO;
+import poov.modelo.dao.VacinaDAOAntigo;
 
 public class EscritaBanco {
 
@@ -16,7 +16,7 @@ public class EscritaBanco {
         DAOFactory factory = new DAOFactory();
         try {
             factory.abrirConexao();
-            VacinaDAO dao = factory.criarVacinaDAO();
+            VacinaDAOAntigo dao = factory.criarVacinaDAO();
 
             System.out.print("Digite o nome: ");
             v.setNome(s.nextLine());

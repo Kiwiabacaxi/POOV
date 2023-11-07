@@ -7,11 +7,11 @@ public class DAOFactory {
 
     private Connection conexao = null;
 
-    public VacinaDAO criarVacinaDAO() {
+    public VacinaDAOAntigo criarVacinaDAO() {
         if (conexao == null) {
             throw new IllegalStateException("Abra uma conexão antes de criar um DAO.");
         } else {
-            return new VacinaDAO(conexao);
+            return new VacinaDAOAntigo(conexao);
         }
     }
 

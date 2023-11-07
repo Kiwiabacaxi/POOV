@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 import poov.modelo.Vacina;
 import poov.modelo.dao.DAOFactory;
-import poov.modelo.dao.VacinaDAO;
+import poov.modelo.dao.VacinaDAOAntigo;
 
 public class RemocaoBanco2 {
 
@@ -18,7 +18,7 @@ public class RemocaoBanco2 {
             System.out.print("Digite o codigo da vacina a remover: ");
             long codigo = Long.parseLong(s.nextLine());
             factory.abrirConexao();
-            VacinaDAO dao = factory.criarVacinaDAO();
+            VacinaDAOAntigo dao = factory.criarVacinaDAO();
 
             Vacina vacina = dao.buscar(codigo);
             if (vacina != null) {

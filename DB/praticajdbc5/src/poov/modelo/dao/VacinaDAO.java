@@ -4,115 +4,99 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-
+import poov.modelo.Situacao;
 import poov.modelo.Vacina;
+import poov.modelo.dao.core.GenericJDBCDAO;
 
-public class VacinaDAO {
-
-    private final Connection conexao;
+public class VacinaDAO extends GenericJDBCDAO<Vacina, Long> {
 
     public VacinaDAO(Connection conexao) {
-        this.conexao = conexao;
+        super(conexao);
     }
 
-    public void gravar(Vacina vacina) throws SQLException {
+    private static final String FIND_ALL_QUERY = "SELECT codigo, nome, descricao, situacao FROM vacina WHERE situacao='ATIVO' ";
+    private static final String FIND_BY_KEY_QUERY = FIND_ALL_QUERY + "AND codigo=? ";
+    private static final String FIND_BY_NAME_LIKE_QUERY = FIND_ALL_QUERY + "AND upper(nome) like upper(?)";
+    private static final String UPDATE_QUERY = "UPDATE vacina SET nome=?, descricao=?, situacao=? WHERE codigo=?";
+    private static final String CREATE_QUERY = "INSERT INTO vacina (nome, descricao, situacao) VALUES (?, ?, ?)";
+    private static final String REMOVE_QUERY = "DELETE FROM vacina WHERE codigo=?";
 
-        String sql = "INSERT INTO vacina(nome, descricao) VALUES (?, ?);";
-        PreparedStatement pstmt = conexao.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
-
-        pstmt.setString(1, vacina.getNome());
-        pstmt.setString(2, vacina.getDescricao());
-
-        if (pstmt.executeUpdate() == 1) {
-            System.out.println("Insercao da vacina feita com sucesso");
-            ResultSet rs = pstmt.getGeneratedKeys();
-            if (rs.next()) {
-                vacina.setCodigo(rs.getLong(1));
-            } else {
-                System.out.println("Erro ao obter o codigo gerado pelo BD para a vacina");
-            }
-            rs.close();
+    @Override
+    protected Vacina toEntity(ResultSet resultSet) throws SQLException {
+        Vacina vacina = new Vacina();
+        vacina.setCodigo(resultSet.getLong("codigo"));
+        vacina.setNome(resultSet.getString("nome"));
+        vacina.setDescricao(resultSet.getString("descricao"));
+        if (resultSet.getString("situacao").equals("ATIVO")) {
+            vacina.setSituacao(Situacao.ATIVO);
         } else {
-            System.out.println("Erro ao inserir a vacina");
+            vacina.setSituacao(Situacao.INATIVO);
         }
-        pstmt.close();
-
+        return vacina;
     }
 
-    public Vacina buscar(long codigo) throws SQLException {
-        Vacina v = null;
-        String sql = "SELECT * FROM vacina WHERE codigo = ? AND situacao = 'ATIVO';";
-        PreparedStatement pstmt = conexao.prepareStatement(sql);
-        pstmt.setLong(1, codigo);
-        ResultSet rs = pstmt.executeQuery();
-        if (rs.next()) {
-            v = new Vacina(rs.getLong(1), rs.getString(2), rs.getString(3));
-        } else {
-            System.out.println("Nao foi encontrada uma vacina com o codigo " + codigo);
+    @Override
+    protected void addParameters(PreparedStatement resultSet, Vacina entity) throws SQLException {
+        resultSet.setString(1, entity.getNome());
+        resultSet.setString(2, entity.getDescricao());
+        resultSet.setString(3, entity.getSituacao().toString());
+        if (entity.getCodigo() != null) {
+            resultSet.setLong(4, entity.getCodigo());
         }
-        rs.close();
-        pstmt.close();
-        return v;
     }
 
-    public List<Vacina> buscarTodas() throws SQLException {
-        Vacina v;
-        List<Vacina> vacinas = new ArrayList<>();
-        String sql = "SELECT * FROM vacina WHERE situacao = 'ATIVO';";
-        Statement stmt = conexao.createStatement();
-        ResultSet rs = stmt.executeQuery(sql);
-        while (rs.next()) {
-            v = new Vacina(rs.getLong(1), rs.getString(2), rs.getString(3));
-            vacinas.add(v);
-        }
-        rs.close();
-        stmt.close();
-        return vacinas;
+    @Override
+    protected String findByKeyQuery() {
+        return FIND_BY_KEY_QUERY;
     }
 
-    public boolean remover(Vacina vacina) throws SQLException {
-        boolean retorno = false;
-        String sqlUpdate = "UPDATE vacina SET situacao = 'INATIVO' WHERE codigo = ?;";
-        PreparedStatement pstmtUpd = conexao.prepareStatement(sqlUpdate);
-
-        pstmtUpd.setLong(1, vacina.getCodigo());
-
-        int resultado = pstmtUpd.executeUpdate();
-
-        if (resultado == 1) {
-            System.out.println("Remocao da vacina executada com sucesso");
-            retorno = true;
-        } else {
-            System.out.println("Erro removendo a vacina com codigo: " + vacina.getCodigo());
-        }
-
-        pstmtUpd.close();
-
-        return retorno;
+    @Override
+    protected String findAllQuery() {
+        return FIND_ALL_QUERY;
     }
 
-    public boolean atualizar(Vacina vacina) throws SQLException {
-        boolean retorno = false;
-        String sqlUpdate = "UPDATE vacina SET nome = ?, descricao = ?, situacao = ? WHERE codigo = ?;";
-        PreparedStatement pstmtUpd = conexao.prepareStatement(sqlUpdate);
-        pstmtUpd.setString(1, vacina.getNome());
-        pstmtUpd.setString(2, vacina.getDescricao());
-        pstmtUpd.setString(3, vacina.getSituacao().toString());
-        pstmtUpd.setLong(4, vacina.getCodigo());
+    @Override
+    protected String updateQuery() {
+        return UPDATE_QUERY;
+    }
 
-        int resultado = pstmtUpd.executeUpdate();
-        if (resultado == 1) {
-            System.out.println("Alteracao da vacina executada com sucesso");
-            retorno = true;
-        } else {
-            System.out.println("Erro alterando a vacina com codigo: " + vacina.getCodigo());
+    @Override
+    protected String createQuery() {
+        return CREATE_QUERY;
+    }
+
+    @Override
+    protected String removeQuery() {
+        return REMOVE_QUERY;
+    }
+
+    public List<Vacina> findByNameLike(String nome) {
+        try {
+            PreparedStatement statement = connection.prepareStatement(FIND_BY_NAME_LIKE_QUERY);
+            statement.setString(1, "%" + nome + "%");
+            ResultSet resultSet = statement.executeQuery();
+            return toEntityList(resultSet);
+        } catch (SQLException e) {
+            showSQLException(e);
         }
-        pstmtUpd.close();
+        return new ArrayList<Vacina>();
+    }
 
-        return retorno;
+    @Override
+    protected void setKeyInStatementFromEntity(PreparedStatement statement, Vacina entity) throws SQLException {
+        statement.setLong(1, entity.getCodigo());
+    }
+
+    @Override
+    protected void setKeyInStatement(PreparedStatement statement, Long key) throws SQLException {
+        statement.setLong(1, key);
+    }
+
+    @Override
+    protected void setKeyInEntity(ResultSet rs, Vacina entity) throws SQLException {
+        entity.setCodigo(rs.getLong(1));
     }
 
 }
