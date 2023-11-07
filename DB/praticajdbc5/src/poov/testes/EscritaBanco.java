@@ -4,8 +4,11 @@ import java.sql.SQLException;
 import java.util.Scanner;
 
 import poov.modelo.Vacina;
-import poov.modelo.dao.DAOFactory;
-import poov.modelo.dao.VacinaDAOAntigo;
+import poov.modelo.dao.ConexaoFactoryPostgreSQL;
+import poov.modelo.dao.VacinaDAO;
+import poov.modelo.dao.core.ConnectionFactory;
+import poov.modelo.dao.core.DAOFactory;
+import poov.modelo.dao.core.GenericJDBCDAO;
 
 public class EscritaBanco {
 
@@ -13,21 +16,24 @@ public class EscritaBanco {
 
         Scanner s = new Scanner(System.in);
         Vacina v = new Vacina();
-        DAOFactory factory = new DAOFactory();
+
+        ConnectionFactory conexaoFactory = new ConexaoFactoryPostgreSQL("localhost:5432/poov", "postgres", "12345");
+        DAOFactory factory = new DAOFactory(conexaoFactory);
+        
         try {
             factory.abrirConexao();
-            VacinaDAOAntigo dao = factory.criarVacinaDAO();
+            VacinaDAO dao = factory.getDAO(VacinaDAO.class);
 
             System.out.print("Digite o nome: ");
             v.setNome(s.nextLine());
             System.out.print("Digite a descricao: ");
             v.setDescricao(s.nextLine());
 
-            dao.gravar(v);
+            dao.create(v);
 
             s.close();
         } catch (SQLException ex) {
-            DAOFactory.mostrarSQLException(ex);
+            GenericJDBCDAO.showSQLException(ex);
         } finally {
             factory.fecharConexao();
         }

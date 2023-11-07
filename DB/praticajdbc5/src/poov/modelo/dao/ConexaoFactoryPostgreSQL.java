@@ -2,21 +2,22 @@ package poov.modelo.dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+
 import poov.modelo.dao.core.ConnectionFactory;
 
 public class ConexaoFactoryPostgreSQL implements ConnectionFactory {
-
+    
     private String dbURL;
     private String user;
     private String password;
     private static final String classeDriver = "org.postgresql.Driver";
     private static final String caminho = "jdbc:postgresql";
-
+    
     /**
      * 
-     * @param dbURL    localhost:5432/poov
-     * @param user     postgres
-     * @param password 12345
+     * @param dbURL     localhost:5432/poov
+     * @param user      postgres
+     * @param password  12345
      */
     public ConexaoFactoryPostgreSQL(String dbURL, String user, String password) {
         this.dbURL = dbURL;
@@ -40,5 +41,4 @@ public class ConexaoFactoryPostgreSQL implements ConnectionFactory {
             return null;
         }
     }
-
 }

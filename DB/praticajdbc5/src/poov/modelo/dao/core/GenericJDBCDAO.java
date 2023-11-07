@@ -15,7 +15,7 @@ public abstract class GenericJDBCDAO<T, PK> implements DAO<T, PK> {
     public GenericJDBCDAO(Connection connection) {
         this.connection = connection;
     }
-
+ 
     @Override
     public T findById(PK key) {
         if (key == null) {
@@ -119,7 +119,7 @@ public abstract class GenericJDBCDAO<T, PK> implements DAO<T, PK> {
 
     protected abstract void setKeyInStatement(PreparedStatement statement, PK key) throws SQLException;
 
-    protected abstract void setKeyInEntity(ResultSet rs, T entity) throws SQLException;
+    protected abstract void setKeyInEntity(ResultSet rs, T entity) throws SQLException ;
 
     protected abstract T toEntity(ResultSet resultSet) throws SQLException;
 
@@ -150,5 +150,5 @@ public abstract class GenericJDBCDAO<T, PK> implements DAO<T, PK> {
             e = e.getNextException();
         }
     }
-
+    
 }

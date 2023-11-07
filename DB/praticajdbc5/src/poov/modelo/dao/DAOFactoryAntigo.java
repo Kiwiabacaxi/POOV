@@ -1,39 +1,23 @@
 package poov.modelo.dao;
 
-import java.lang.reflect.InvocationTargetException;
-import java.security.InvalidParameterException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import poov.modelo.dao.core.ConnectionFactory;
-import poov.modelo.dao.core.DAO;
+public class DAOFactoryAntigo {
 
-public class DAOFactory {
-
-    private ConnectionFactory conexaoFactory;
     private Connection conexao = null;
 
-    public DAOFactory(ConnectionFactory conexaoFactory) {
-        this.conexaoFactory = conexaoFactory;
-    }
-
-    public <T extends DAO<?, ?>> T getDAO(Class<T> daoClazz) {
+    public VacinaDAOAntigo criarVacinaDAO() {
         if (conexao == null) {
             throw new IllegalStateException("Abra uma conexão antes de criar um DAO.");
         } else {
-            try {
-                return daoClazz.getDeclaredConstructor(Connection.class).newInstance(conexao);
-            } catch (InstantiationException | IllegalAccessException | IllegalArgumentException
-                    | InvocationTargetException | NoSuchMethodException | SecurityException e) {
-                throw new InvalidParameterException(
-                        "Não foi possível criar um DAO do tipo " + daoClazz.getName() + ".");
-            }
+            return new VacinaDAOAntigo(conexao);
         }
     }
 
     public void abrirConexao() throws SQLException {
         if (conexao == null) {
-            conexao = conexaoFactory.getConnection();
+            conexao = ConexaoFactory.getConexao();
         } else {
             throw new IllegalStateException("A conexão já está aberta.");
         }
@@ -73,4 +57,19 @@ public class DAOFactory {
             conexao.setAutoCommit(true);
         }
     }
+
+    public static void mostrarSQLException(SQLException e) {
+        while (e != null) {
+            System.out.println("SQL State: " + e.getSQLState());
+            System.out.println("Error Code: " + e.getErrorCode());
+            System.out.println("Mensagem: " + e.getMessage());
+            Throwable t = e.getCause();
+            while (t != null) {
+                System.out.println("Causa: " + t);
+                t = t.getCause();
+            }
+            e = e.getNextException();
+        }
+    }
+
 }

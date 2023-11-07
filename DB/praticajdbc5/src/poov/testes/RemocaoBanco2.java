@@ -3,9 +3,13 @@ package poov.testes;
 import java.sql.SQLException;
 import java.util.Scanner;
 
+import poov.modelo.Situacao;
 import poov.modelo.Vacina;
-import poov.modelo.dao.DAOFactory;
-import poov.modelo.dao.VacinaDAOAntigo;
+import poov.modelo.dao.ConexaoFactoryPostgreSQL;
+import poov.modelo.dao.VacinaDAO;
+import poov.modelo.dao.core.ConnectionFactory;
+import poov.modelo.dao.core.DAOFactory;
+import poov.modelo.dao.core.GenericJDBCDAO;
 
 public class RemocaoBanco2 {
 
@@ -13,27 +17,29 @@ public class RemocaoBanco2 {
 
         Scanner s = new Scanner(System.in);
 
-        DAOFactory factory = new DAOFactory();
+        ConnectionFactory conexaoFactory = new ConexaoFactoryPostgreSQL("localhost:5432/poov", "postgres", "12345");
+        DAOFactory factory = new DAOFactory(conexaoFactory);
         try {
             System.out.print("Digite o codigo da vacina a remover: ");
             long codigo = Long.parseLong(s.nextLine());
             factory.abrirConexao();
-            VacinaDAOAntigo dao = factory.criarVacinaDAO();
+            VacinaDAO dao = factory.getDAO(VacinaDAO.class);
 
-            Vacina vacina = dao.buscar(codigo);
+            Vacina vacina = dao.findById(codigo);
             if (vacina != null) {
                 System.out.println(vacina);
                 System.out.print("Deseja realmente remover essa vacina? (S/N): ");
                 String opcao = s.nextLine();
                 if (opcao.equalsIgnoreCase("S")) {
-                    dao.remover(vacina);
+                    vacina.setSituacao(Situacao.INATIVO);
+                    dao.update(vacina);
                 }
             } else {
                 System.out.println("Nao foi encontrada uma vacina com o codigo: " + codigo);
             }
             s.close();
         } catch (SQLException ex) {
-            DAOFactory.mostrarSQLException(ex);
+            GenericJDBCDAO.showSQLException(ex);
         } finally {
             factory.fecharConexao();
         }

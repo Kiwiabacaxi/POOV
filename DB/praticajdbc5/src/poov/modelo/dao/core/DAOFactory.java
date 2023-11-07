@@ -1,15 +1,12 @@
-package poov.modelo.dao;
+package poov.modelo.dao.core;
 
 import java.lang.reflect.InvocationTargetException;
 import java.security.InvalidParameterException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import poov.modelo.dao.core.ConnectionFactory;
-import poov.modelo.dao.core.DAO;
-
 public class DAOFactory {
-
+    
     private ConnectionFactory conexaoFactory;
     private Connection conexao = null;
 
@@ -25,13 +22,12 @@ public class DAOFactory {
                 return daoClazz.getDeclaredConstructor(Connection.class).newInstance(conexao);
             } catch (InstantiationException | IllegalAccessException | IllegalArgumentException
                     | InvocationTargetException | NoSuchMethodException | SecurityException e) {
-                throw new InvalidParameterException(
-                        "Não foi possível criar um DAO do tipo " + daoClazz.getName() + ".");
+                throw new InvalidParameterException("Não foi possível criar um DAO do tipo " + daoClazz.getName() + ".");
             }
         }
     }
 
-    public void abrirConexao() throws SQLException {
+    public void abrirConexao( ) throws SQLException {
         if (conexao == null) {
             conexao = conexaoFactory.getConnection();
         } else {

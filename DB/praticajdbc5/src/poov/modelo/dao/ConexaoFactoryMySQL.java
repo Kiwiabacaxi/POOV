@@ -6,18 +6,18 @@ import java.sql.DriverManager;
 import poov.modelo.dao.core.ConnectionFactory;
 
 public class ConexaoFactoryMySQL implements ConnectionFactory {
-
+    
     private String dbURL;
     private String user;
     private String password;
     private static final String classeDriver = "com.mysql.cj.jdbc.Driver";
     private static final String caminho = "jdbc:mysql";
-
+    
     /**
      * 
-     * @param dbURL    localhost:3306/poov
-     * @param user     root
-     * @param password 12345
+     * @param dbURL     localhost:3306/poov
+     * @param user      root
+     * @param password  12345
      */
     public ConexaoFactoryMySQL(String dbURL, String user, String password) {
         this.dbURL = dbURL;

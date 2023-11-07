@@ -5,8 +5,11 @@ import java.util.Scanner;
 
 import poov.modelo.Situacao;
 import poov.modelo.Vacina;
-import poov.modelo.dao.DAOFactory;
-import poov.modelo.dao.VacinaDAOAntigo;
+import poov.modelo.dao.ConexaoFactoryPostgreSQL;
+import poov.modelo.dao.VacinaDAO;
+import poov.modelo.dao.core.ConnectionFactory;
+import poov.modelo.dao.core.DAOFactory;
+import poov.modelo.dao.core.GenericJDBCDAO;
 
 public class UpdateBanco {
 
@@ -14,14 +17,15 @@ public class UpdateBanco {
 
         Scanner s = new Scanner(System.in);
 
-        DAOFactory factory = new DAOFactory();
+        ConnectionFactory conexaoFactory = new ConexaoFactoryPostgreSQL("localhost:5432/poov", "postgres", "12345");
+        DAOFactory factory = new DAOFactory(conexaoFactory);
         try {
             System.out.print("Digite o codigo da vacina a alterar: ");
             long codigo = Long.parseLong(s.nextLine());
             factory.abrirConexao();
-            VacinaDAOAntigo dao = factory.criarVacinaDAO();
+            VacinaDAO dao = factory.getDAO(VacinaDAO.class);
 
-            Vacina vacina = dao.buscar(codigo);
+            Vacina vacina = dao.findById(codigo);
 
             if (vacina != null) {
                 System.out.println(vacina);
@@ -52,7 +56,7 @@ public class UpdateBanco {
                         }
                     } while (!opcao.equals("4"));
 
-                    dao.atualizar(vacina);
+                    dao.update(vacina);
 
                     s.close();
                 }
@@ -60,7 +64,7 @@ public class UpdateBanco {
                 System.out.println("Nao foi encontrada uma vacina com o codigo: " + codigo);
             }
         } catch (SQLException ex) {
-            DAOFactory.mostrarSQLException(ex);
+            GenericJDBCDAO.showSQLException(ex);
         } finally {
             factory.fecharConexao();
         }

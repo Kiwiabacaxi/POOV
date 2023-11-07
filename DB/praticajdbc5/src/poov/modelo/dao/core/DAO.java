@@ -10,22 +10,15 @@ package poov.modelo.dao.core;
 
 public interface DAO<T, PK> {
 
-	// metodos de um crudzao
-
 	<S extends T> S create(S entity);
-
 	<S extends T> S update(S entity);
-
 	T findById(PK key);
-
 	Iterable<T> findAll();
-
 	void deleteById(PK key);
-
 	void delete(T entity);
 
 	// boolean existsById(PK id);
-	// <S extends T> Iterable<S> saveAll(Iterable<S> entities); // salva uma coleção
+	// <S extends T> Iterable<S> saveAll(Iterable<S> entities);
 	// void deleteAll(Iterable<? extends T> entities);
 	// void deleteAll();
 	// long count();

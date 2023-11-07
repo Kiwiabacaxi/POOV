@@ -4,18 +4,22 @@ import java.sql.SQLException;
 import java.util.List;
 
 import poov.modelo.Vacina;
-import poov.modelo.dao.DAOFactory;
-import poov.modelo.dao.VacinaDAOAntigo;
+import poov.modelo.dao.ConexaoFactoryPostgreSQL;
+import poov.modelo.dao.VacinaDAO;
+import poov.modelo.dao.core.ConnectionFactory;
+import poov.modelo.dao.core.DAOFactory;
+import poov.modelo.dao.core.GenericJDBCDAO;
 
 public class LeituraTodosBanco {
 
     public static void main(String[] args) {
 
-        DAOFactory factory = new DAOFactory();
+        ConnectionFactory conexaoFactory = new ConexaoFactoryPostgreSQL("localhost:5432/poov", "postgres", "12345");
+        DAOFactory factory = new DAOFactory(conexaoFactory);
         try {
             factory.abrirConexao();
-            VacinaDAOAntigo dao = factory.criarVacinaDAO();
-            List<Vacina> vacinas = dao.buscarTodas();
+            VacinaDAO dao = factory.getDAO(VacinaDAO.class);
+            List<Vacina> vacinas = dao.findAll();
 
             if (vacinas.isEmpty()) {
                 System.out.println("Nao existem vacinas salvas no BD");
@@ -25,7 +29,7 @@ public class LeituraTodosBanco {
                 }
             }
         } catch (SQLException ex) {
-            DAOFactory.mostrarSQLException(ex);
+            GenericJDBCDAO.showSQLException(ex);
         } finally {
             factory.fecharConexao();
         }

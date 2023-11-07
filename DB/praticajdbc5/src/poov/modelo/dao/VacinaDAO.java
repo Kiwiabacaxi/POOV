@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
 import poov.modelo.Situacao;
 import poov.modelo.Vacina;
 import poov.modelo.dao.core.GenericJDBCDAO;
@@ -38,12 +39,12 @@ public class VacinaDAO extends GenericJDBCDAO<Vacina, Long> {
     }
 
     @Override
-    protected void addParameters(PreparedStatement resultSet, Vacina entity) throws SQLException {
-        resultSet.setString(1, entity.getNome());
-        resultSet.setString(2, entity.getDescricao());
-        resultSet.setString(3, entity.getSituacao().toString());
+    protected void addParameters(PreparedStatement pstmt, Vacina entity) throws SQLException {
+        pstmt.setString(1, entity.getNome());
+        pstmt.setString(2, entity.getDescricao());
+        pstmt.setString(3, entity.getSituacao().toString());
         if (entity.getCodigo() != null) {
-            resultSet.setLong(4, entity.getCodigo());
+            pstmt.setLong(4, entity.getCodigo());
         }
     }
 
