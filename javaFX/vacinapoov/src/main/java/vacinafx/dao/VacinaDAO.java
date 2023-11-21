@@ -73,6 +73,19 @@ public class VacinaDAO extends GenericJDBCDAO<Vacina, Long> {
         return REMOVE_QUERY;
     }
 
+    // Buscar todas as vacinas
+    public List<Vacina> findAll() {
+        try {
+            PreparedStatement statement = connection.prepareStatement(FIND_ALL_QUERY);
+            ResultSet resultSet = statement.executeQuery();
+            return toEntityList(resultSet);
+        } catch (SQLException e) {
+            showSQLException(e);
+        }
+
+        return new ArrayList<Vacina>();
+    }
+
     public List<Vacina> findByNameLike(String nome) {
         try {
             PreparedStatement statement = connection.prepareStatement(FIND_BY_NAME_LIKE_QUERY);

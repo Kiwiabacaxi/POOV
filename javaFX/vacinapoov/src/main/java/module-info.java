@@ -7,6 +7,7 @@ module vacinafx {
 
     opens vacinafx to javafx.fxml, javafx.graphics;
     opens vacinafx.model to javafx.base, javafx.graphics;
+    opens vacinafx.dao to javafx.base, javafx.graphics;
     opens vacinafx.controller to javafx.fxml, javafx.graphics;
 
     exports vacinafx;
